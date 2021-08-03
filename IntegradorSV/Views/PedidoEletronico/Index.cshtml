@@ -1,0 +1,38 @@
+﻿@model IntegradorSV.Models.PedidoEletronicoModel.PedidoEletronicoTokenModel
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Conectar</title>
+    <script type="text/javascript" src="~/js/Views/PedidoEletronico/Index.js"></script>
+</head>
+<body>
+    <div class="text-center">
+        <h1 class="display-4">Insira os Tokens</h1>
+    </div>
+
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert alert-danger" id="danger-alert">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            @TempData["Erro"]
+        </div>
+    }
+
+    @using (Html.BeginForm("Index", "PedidoEletronico", FormMethod.Post))
+    {
+        <div class="form-group">
+            <label for="tokenSuasVendas">Token SuasVendas</label>
+            @Html.TextBoxFor(m => m.TokenSuasVendas, new { @class = "form-control", placeholder = "Insira o token SuasVendas" })
+            <span style="color : red">@Html.ValidationMessageFor(m => m.TokenSuasVendas)</span>
+        </div>
+        <div class="form-group">
+            <label for="tokenPedidoEletronico">Token Pedido Eletrônico</label>
+            @Html.TextBoxFor(m => m.TokenPedidoEletronico, new { @class = "form-control", placeholder = "Insira o token Pedido Eletrônico" })
+            <span style="color : red">@Html.ValidationMessageFor(m => m.TokenPedidoEletronico)</span>
+        </div>
+        <button type="submit" class="btn btn-primary">Integrar</button>
+
+    }
+
+</body>
+</html>
+
