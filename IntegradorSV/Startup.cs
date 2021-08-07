@@ -1,7 +1,14 @@
+using IntegradorSV.Areas.PedidoEletronico.Data.Session;
+using IntegradorSV.Bibliotecas.Middleware;
+using IntegradorSV.Bibliotecas.Sessao;
+using IntegradorSV.DataBase.Contexts;
+using IntegradorSV.DataBase.Interfaces;
+using IntegradorSV.DataBase.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,16 +31,24 @@ namespace IntegradorSV
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddDistributedMemoryCache();
             services.AddControllersWithViews();
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromDays(1);
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
-            }); 
+            });
 
+            services.AddMemoryCache();
+            services.AddHttpContextAccessor();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<Session>();
+            services.AddScoped<SessionPedidoEletronico>();
+            services.AddScoped<SessionUsuario>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddDbContext<IntegradorSuasVendasContext>(options => options.UseNpgsql(Configuration.GetConnectionString("IntegradorSVDb")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,12 +73,20 @@ namespace IntegradorSV
 
             app.UseSession();
 
-            app.UseEndpoints(endpoints =>
+            app.UseMiddleware<ValidateAntiForgeryTokenMiddleware>();
+
+            app.UseMvc(routes =>
             {
-                endpoints.MapControllerRoute(
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Login}/{id?}"
+                );
+                routes.MapRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    template: "/{controller=Home}/{action=Login}/{id?}"
+                );
             });
+
         }
     }
 }

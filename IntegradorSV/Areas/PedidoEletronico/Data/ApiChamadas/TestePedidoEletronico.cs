@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace IntegradorSV.ApiChamadas.PedidoEletronico
+namespace IntegradorSV.Areas.PedidoEletronico.Data.ApiChamadas
 {
     public static class TestePedidoEletronico
     {
