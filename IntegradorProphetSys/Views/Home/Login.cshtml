@@ -1,0 +1,47 @@
+﻿@model IntegradorProphetSys.Models.Usuario.LoginModel
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Login</title>
+    <link href="~/css/Views/Home/Login.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/js/Views/Home/Login.js"></script>
+</head>
+<body>
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success" id="danger-alert">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            @TempData["Sucesso"]
+        </div>
+    }
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert alert-danger" id="danger-alert">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            @TempData["Erro"]
+        </div>
+    }
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+            <!-- Tabs Titles -->
+            <!-- Icon -->
+            <div class="fadeIn first">
+                <img src="https://apkplz.net/storage/images/com/bitbleed/iconpack/hexagon/iconpack/com.bitbleed.iconpack.hexagon.iconpack_1.png" id="icon" alt="User Icon" />
+            </div>
+
+            <!-- Login Form -->
+            <form asp-controller="Home" asp-action="Login" method="post">
+                <input asp-for="usr_email" type="text" id="email" class="fadeIn second" placeholder="login">
+                <input asp-for="usr_senha_string" type="password" id="senha" class="fadeIn third"  placeholder="password">
+                <button type="submit" class="btn btn-primary">Acessar</button>
+            </form>
+
+            <!-- Remind Passowrd -->
+            <div id="formFooter">
+                <a class="underlineHover" href="#">Forgot Password?</a><br />
+                <a class="underlineHover" href="../Home/Cadastrar" role="button">Cadastre-Se</a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
