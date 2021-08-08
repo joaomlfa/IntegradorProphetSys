@@ -29,7 +29,7 @@ namespace IntegradorSV.Areas.PedidoEletronico.Data.ApiChamadas
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 var tokenPedidoEletronico = sessionUsuario.GetUsuario().usr_token_pedido_eletronico; 
                 client.DefaultRequestHeaders.Add("xToken", tokenPedidoEletronico);
-                HttpResponseMessage response = await client.GetAsync("Produto/ObterRegistros/1/100/" + "2021-08-04");
+                HttpResponseMessage response = await client.GetAsync("Produto/ObterRegistros/1/100/" + "2000-08-04");
 
                 if (response.IsSuccessStatusCode)
                 {

@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+    VerificarProdutosNovosAtualizados();
     $('.counter').each(function () {
         $(this).prop('Counter', 0).animate({
             Counter: $(this).text()
@@ -40,9 +41,43 @@ function VerificarProdutosNovosAtualizados() {
             url: "/PedidoEletronico/Dashboard/VerificarProdutosNovosAtualizados",
             success:
                 function (data) {
-                    data = JSON.parse(data);
+                    if (data != "") {                       
+                        data = JSON.parse(data);
+                        if (data.ListagemRetorno.length > 0) {
+                            AlterarCorProgress("produto", true);
+                            $("#qtde-produto").html(data.ListagemRetorno.length);
+                            $("#spin-produto").attr("hidden", "true");
+                            $("#btn-produto").attr("hidden", "true");
+                            $("#btn-produto-sincronizar").removeAttr("hidden");
+
+                        } else {
+                            AlterarCorProgress("produto", false);
+                            $("#qtde-produto").html(0);
+                            $("#spin-produto").attr("hidden", "true");
+                            $("#btn-produto-sincronizar").attr("hidden", "true");
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Erro de comunicação",
+                            text: "Houve um erro ao tentar solicitar os dados, tente novamente mais tarde caso o problema persista entre em contato conosco.",
+
+                        });
+                    }
+                    
                     
                 }
         });
     });
+}
+
+
+function AlterarCorProgress(modulo, possuiAltualizacao) {
+    if (possuiAltualizacao) {
+        $(".progress-" + modulo).removeAttr("style");
+        $(".progress-" + modulo).attr("style", "transform: rotate(180deg);border-color: #ff00009c !important;");
+    } else {
+        $(".progress-" + modulo).removeAttr("style");
+        $(".progress-" + modulo).attr("style", "transform: rotate(180deg);border-color: #007bff !important;");
+    }
 }
